@@ -1,0 +1,57 @@
+---
+- name: Install docker and weather_delivery
+  hosts: localhost
+  connection: local 
+
+  tasks:
+  - name: Update yum
+    yum:
+      name: "*"
+      state: latest
+    become: true
+  
+  - name: install Docker-ce
+    yum:
+      name: docker-ce
+      state: present
+    become: true
+    
+  
+  - name: Configure Docker syslog
+    template:
+      src: 'daemon.json'
+      dest: '/etc/docker/daemon.json'
+      owner: 'root'
+      group: 'root'
+      mode: '0644'
+    become: true
+
+  - name: Restart docker
+    service:
+      name: 'docker'
+      state: 'restarted'
+    become: true
+
+  - name: Install Git
+    yum:
+      name: git
+      state: present
+      update_cache: yes
+    
+  - name: Get app from GitHub
+    git:
+      repo: 'https://github.com/DomenZero/weather_delivery.git'
+      dest: /tmp/weather_delivery
+  
+  - name: Build docker image from sources
+    shell: docker build -t weather_delivery:dev .
+    args:
+      chdir: /tmp/weather_delivery/
+    become: true
+
+  - name: Run docker container weather_delivery
+    shell: docker run --rm weather_delivery:dev --api_key "{{ API_KEY }}" --city_name "{{ CITY_NAME }}"
+    register: output_run
+    
+  - name: Show docker output
+    debug: msg="{{ output_run.stdout }}"

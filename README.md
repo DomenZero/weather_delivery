@@ -1,5 +1,9 @@
 # Weather delivery
 
+#### Start Ansible yml
+```bash
+# sudo ansible-playbook ansible-docker_weather.yml --extra-vars "API_KEY=111 CITY_NAME=Honolulu"
+```
 #### Docker Start
 ```bash
 # docker build -t weather_delivery:dev .

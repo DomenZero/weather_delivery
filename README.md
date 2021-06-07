@@ -1,9 +1,5 @@
 # Weather delivery
 
-
-Example:
-python weather_delivery.py --api_key 1111 --city_name Honolulu
-
 #### Docker Start
 ```bash
 # docker build -t weather_delivery:dev .
@@ -19,7 +15,7 @@ Pressure: 1016
 ```bash
 # sudo yum install python3-pip
 # sudo pip3 install requests
-# python3 weather_delivery.py 
+# python3 weather_delivery.py --api_key 1111 --city_name Honolulu
 Source: openweathermap
 City: Honolulu
 Description: few clouds
